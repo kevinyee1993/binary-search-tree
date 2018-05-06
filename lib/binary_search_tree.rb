@@ -87,29 +87,53 @@ class BinarySearchTree
 
     if target_node.nil?
       return false
+    #target node has no children
     elsif target_node.left.nil? && target_node.right.nil?
-      if target_node == @parent.left
-        @parent.left = nil
+      delete_parent_child(@parent, target_node, value)
+
+    #target node has only one child
+    elsif target_node.left.nil? ^ target_node.right.nil?
+      child_node = target_node.left || target_node.right
+      delete_parent_child(@parent, target_node, value)
+
+      if(child_node.value <= @parent.value)
+        @parent.left = child_node
       else
-        @parent.right = nil
+        @parent.right = child_node
       end
+
+    #target node has 2 children
+    else
+      max = maximum(target_node.left)
+      target_node.value = max.value
+      @parent.right = max.left
+
+
+
+
     end
-
-
-
-
-    # elsif @root.value == value && @root.left.nil? || @root.right.nil?
-    #   promoted_root = @root.left
-    #   promoted_root ||= @root.right
-    #
-    #   @root = promoted_root
-    # end
 
 
   end
 
+  def delete_parent_child(parent_node, target_node, value)
+    if target_node == @parent.left
+      @parent.left = nil
+    else
+      @parent.right = nil
+    end
+  end
+
+
   # helper method for #delete:
   def maximum(tree_node = @root)
+    curr_node = tree_node
+    until curr_node.right.nil?
+      @parent = curr_node
+      curr_node = curr_node.right
+    end
+
+    curr_node
   end
 
   def depth(tree_node = @root)
