@@ -6,6 +6,9 @@ require 'bst_node'
 class BinarySearchTree
   attr_accessor :root
 
+  #keeps track of the second to last level node before the target
+  attr_accessor :parent
+
   def initialize
     @root = nil
   end
@@ -25,6 +28,7 @@ class BinarySearchTree
     until inserted
       # p current_node.value
       # p value
+
       if value <= current_node.value && current_node.left.nil?
         # p "inserted left"
         current_node.left = BSTNode.new(value)
@@ -53,14 +57,18 @@ class BinarySearchTree
     # return @root if value == @root.value
 
     while curr_node.left || curr_node.right || value == curr_node.value
+
       #base case
       return curr_node if value == curr_node.value
 
       if value <= curr_node.value
+        @parent = curr_node
         curr_node = curr_node.left
       elsif value > curr_node.value
+        @parent = curr_node
         curr_node = curr_node.right
       end
+
     end
 
     #if get to the bottom of the tree and didn't find, return nil
@@ -69,6 +77,35 @@ class BinarySearchTree
   end
 
   def delete(value)
+    #if target node is the root and root has no children
+    if @root.value == value && @root.left.nil? && @root.right.nil?
+      @root = nil
+      return true
+    end
+
+    target_node = find(value, @root)
+
+    if target_node.nil?
+      return false
+    elsif target_node.left.nil? && target_node.right.nil?
+      if target_node == @parent.left
+        @parent.left = nil
+      else
+        @parent.right = nil
+      end
+    end
+
+
+
+
+    # elsif @root.value == value && @root.left.nil? || @root.right.nil?
+    #   promoted_root = @root.left
+    #   promoted_root ||= @root.right
+    #
+    #   @root = promoted_root
+    # end
+
+
   end
 
   # helper method for #delete:
