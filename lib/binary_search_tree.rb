@@ -45,27 +45,27 @@ class BinarySearchTree
     end
 
   end
-  ##this stuff belongs to insert but im just finding a more elegant way to do
-  # #simply sets the root if it doesn't exist
-  # #the base cases here
-  # if @root.nil?
-  #   @root = BSTNode.new(value)
-  # elsif @root.left.nil? && value <= @root.value
-  #   @root.left = BSTNode.new(value)
-  # elsif @root.right.nil? && value > @root.value
-  #   @root.right = BSTNode.new(value)
-  # end
-  #
-  # #need to do some recursion here to add value
-  # #or loop whatever feel me
-  # inserted = false
-  # current_node = @root
-  #
-  # until inserted
-  #
-  # end
+
 
   def find(value, tree_node = @root)
+    curr_node = @root
+    #base case for root
+    # return @root if value == @root.value
+
+    while curr_node.left || curr_node.right || value == curr_node.value
+      #base case
+      return curr_node if value == curr_node.value
+
+      if value <= curr_node.value
+        curr_node = curr_node.left
+      elsif value > curr_node.value
+        curr_node = curr_node.right
+      end
+    end
+
+    #if get to the bottom of the tree and didn't find, return nil
+    nil
+
   end
 
   def delete(value)
