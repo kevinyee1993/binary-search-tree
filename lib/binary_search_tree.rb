@@ -107,10 +107,6 @@ class BinarySearchTree
       max = maximum(target_node.left)
       target_node.value = max.value
       @parent.right = max.left
-
-
-
-
     end
 
 
@@ -137,6 +133,43 @@ class BinarySearchTree
   end
 
   def depth(tree_node = @root)
+    #base case
+
+    if tree_node.nil?
+      return 0
+    end
+
+    if tree_node.left.nil? && tree_node.right.nil?
+      return 0
+    end
+
+    #need to use recursion here possibly.......
+    #sum of different branches divided by 2 and round up
+    sum = 0
+    if tree_node.left || tree_node.right
+      sum += 1
+    end
+
+    # sum + ((depth(tree_node.left) + depth(tree_node.right).to_f) )
+    # if tree_node.left && tree_node.right
+      left_depth = depth(tree_node.left)
+      right_depth = depth(tree_node.right)
+
+      actual_depth = 0
+
+      if left_depth >= right_depth
+        actual_depth = left_depth
+      else
+        actual_depth = right_depth
+      end
+
+      return sum + actual_depth
+
+      # return sum + ((depth(tree_node.left).to_f + depth(tree_node.right).to_f) ).ceil
+    # else
+      # return sum + ((depth(tree_node.left).to_f + depth(tree_node.right).to_f)).ceil
+    # end
+
   end
 
   def is_balanced?(tree_node = @root)
