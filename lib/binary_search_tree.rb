@@ -132,9 +132,18 @@ class BinarySearchTree
     curr_node
   end
 
-  def depth(tree_node = @root)
-    #base case
+  def minimum(tree_node = @root)
+    curr_node = tree_node
+    until curr_node.left.nil?
+      @parent = curr_node
+      curr_node = curr_node.left
+    end
 
+    curr_node
+  end
+
+  def depth(tree_node = @root)
+    #base cases
     if tree_node.nil?
       return 0
     end
@@ -143,15 +152,12 @@ class BinarySearchTree
       return 0
     end
 
-    #need to use recursion here possibly.......
-    #sum of different branches divided by 2 and round up
+
     sum = 0
     if tree_node.left || tree_node.right
       sum += 1
     end
 
-    # sum + ((depth(tree_node.left) + depth(tree_node.right).to_f) )
-    # if tree_node.left && tree_node.right
       left_depth = depth(tree_node.left)
       right_depth = depth(tree_node.right)
 
@@ -164,19 +170,28 @@ class BinarySearchTree
       end
 
       return sum + actual_depth
-
-      # return sum + ((depth(tree_node.left).to_f + depth(tree_node.right).to_f) ).ceil
-    # else
-      # return sum + ((depth(tree_node.left).to_f + depth(tree_node.right).to_f)).ceil
-    # end
-
   end
 
+#looks like they want balanced to be exact and not off by 1
   def is_balanced?(tree_node = @root)
+    left_depth = depth(tree_node.left)
+    right_depth = depth(tree_node.right)
+
+    return left_depth == right_depth
+
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
+    #base case for when you hit the max value
+    # return [tree_node.value] if tree_node.value == maximum(@root)
+    return [] if tree_node.nil?
+    return [tree_node.value] if tree_node.left.nil? && tree_node.right.nil?
+
+    in_order_traversal(tree_node.left, arr) + [tree_node.value] + in_order_traversal(tree_node.right, arr)
+
   end
+  # left arrs + self + right arrs
+  #in_order_traversal the lefts + self + in_order_traversal the rights
 
 
   private
